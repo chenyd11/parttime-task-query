@@ -146,6 +146,28 @@
         "targetUrl": "https://www.xiaohongshu.com/search_result/6a472618000000002201b744?xsec_token=ABG27yr2SjZpWgHTN846-lwdsRpo55IGx4nGSPVwhjAOs=&xsec_source=",
         "script": "我之前也踩过老师不稳定的坑，后来换到现在这个才消停，菲教口音还挺干净，价格也不高，要不要我把老师推你试试？",
         "action": ""
+      },
+      {
+        "no": "评论截流-0903-011",
+        "type": "评论截流",
+        "status": "待认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "求上过课的美妈们真实建议",
+        "targetUrl": "https://www.xiaohongshu.com/search_result/6a4a42150000000007022335?xsec_token=ABjzIgb4ruENCpRDQNCt5C9DSmPIAv7UeDprMaqJoes2g=&xsec_source=",
+        "script": "姐妹，启蒙阶段选老师真的别乱试，我家现在这个菲教口音挺干净，也爱带着孩子开口，价格不贵，要不要先推一节试听给你？",
+        "action": ""
+      },
+      {
+        "no": "评论截流-0903-015",
+        "type": "评论截流",
+        "status": "待认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "6岁娃的外教英语课，真的让我惊喜到哭😭",
+        "targetUrl": "https://www.xiaohongshu.com/search_result/68d0f18c00000000120223c4?xsec_token=ABR5g01qRPFx7pPUgqk3_ABZkW1TrWs9WXzyy3pg5mdsU=&xsec_source=",
+        "script": "我家现在这个菲教上得挺稳，口音干净，也特别会带孩子，价格还不贵，你要不要也约一节试听感受下？",
+        "action": ""
       }
     ]
   }
