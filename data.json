@@ -1,0 +1,69 @@
+[
+  {
+    "code": "JZ-004",
+    "name": "向宇",
+    "tasks": [
+      {
+        "no": "私信-0902-001",
+        "type": "私信用户",
+        "status": "已审核",
+        "commission": "0.5",
+        "targetLabel": "目标用户主页",
+        "targetTitle": "🐳丹宝贝💤",
+        "targetUrl": "https://www.xiaohongshu.com/user/profile/56deced5aed75834733ad34a",
+        "script": "我当初也在这几家纠结过，后面看下来还是现在这个更省心，菲教口音干净、价格不贵，老师也能固定，要不我推你试听一节看看？",
+        "action": "私信该用户，推荐51Talk菲教试听"
+      }
+    ]
+  },
+  {
+    "code": "JZ-058",
+    "name": "张婧怡",
+    "tasks": [
+      {
+        "no": "评论截流-0903-002",
+        "type": "评论截流",
+        "status": "已认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "不敢信，还有50分钟30来块的外教课！",
+        "targetUrl": "https://www.xiaohongshu.com/search_result/6a5c98ce0000000011018ced?xsec_token=ABGfcwgnq-4Pz3ysPXxcn2r7rkMkd6JfTGI_gqcN-rSWk%3D&xsec_source=",
+        "script": "姐妹，启蒙阶段选老师真的别乱试，我家现在这个菲教口音挺干净，也爱带着孩子开口，价格不贵，要不要先推一节试听给你？",
+        "action": "启蒙先开口，再逐步提升"
+      },
+      {
+        "no": "评论截流-0903-001",
+        "type": "评论截流",
+        "status": "待认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "准备报51talk，这个课包可以入了吗？",
+        "targetUrl": "https://www.xiaohongshu.com/search_result/6a1a547c000000000702498d?xsec_token=ABeizM2ipamkv5cN-G0U__FGDwEZJG6DPCuTkG0M248uE%3D&xsec_source=",
+        "script": "姐妹，我家就是上51Talk菲教，单课挺便宜，口音可以挑，老师也能固定，现在还有2节赠课，要不要先约一节试试看？",
+        "action": "51Talk价格和老师选法"
+      },
+      {
+        "no": "评论截流-0903-003",
+        "type": "评论截流",
+        "status": "待认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "Polly结束后，转到了其他家，说下真实感受",
+        "targetUrl": "https://www.xiaohongshu.com/search_result/69c8f48c0000000023007207?xsec_token=AB1onII83VQ4IdDOfAM4dZesKy5JXgKfrMwpOC3YtbMQE%3D&xsec_source=",
+        "script": "我家现在这个菲教上得挺稳，口音干净，也特别会带孩子，价格还不贵，你要不要也约一节试听感受下？",
+        "action": "菲教口音干净、好续课"
+      },
+      {
+        "no": "评论截流-0903-004",
+        "type": "评论截流",
+        "status": "待认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "polly上了120节，说说菲教应该怎么选！",
+        "targetUrl": "https://www.xiaohongshu.com/search_result/6a5ee8160000000001000711?xsec_token=ABUFu9LtFxyQy0EZwEK9r6ElmmNLhm8HK5ozNeOj2aEJo%3D&xsec_source=",
+        "script": "我当初也在这几家纠结过，后面看下来还是现在这个更省心，菲教口音干净、价格不贵，老师也能固定，要不我推你试听一节看看？",
+        "action": "怎么选才不踩坑"
+      }
+    ]
+  }
+]
