@@ -13,6 +13,17 @@
         "targetUrl": "https://www.xiaohongshu.com/explore/6a744f7b000000003301bf18?xsec_token=ABknADRzyGsrsa6D46k6-xZNoiHMS1F1MMfoYs6OUPbxY=&xsec_source=",
         "script": "我家上的外教课，上完孩子愿意主动开口了，这点我很满意。",
         "action": ""
+      },
+      {
+        "no": "评论截流-0904-199",
+        "type": "评论截流",
+        "status": "已认领",
+        "commission": "0.5",
+        "targetLabel": "目标笔记",
+        "targetTitle": "想给孩子买个阅读营，这个伴鱼怎么样？",
+        "targetUrl": "https://www.xiaohongshu.com/explore/68ea2eb500000000030360b2?xsec_token=ABjR8Qj8-zc1x02wcaTsdJA6vx69SvYQhOsOkL7TaVj40=&xsec_source=",
+        "script": "我家娃上的外教课不是死记硬背，孩子接受度不错。",
+        "action": ""
       }
     ]
   }
