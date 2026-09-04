@@ -90,7 +90,7 @@
 
     .claim-fields {
       display: grid;
-      grid-template-columns: 1fr 1fr auto;
+      grid-template-columns: 1fr auto;
       gap: 10px;
       align-items: center;
     }
@@ -355,10 +355,9 @@
 
     <section class="claim">
       <h2>认领新任务</h2>
-      <p class="hint">先填写自己的姓名和兼职编号，系统只显示当前可认领的任务。</p>
+      <p class="hint">填写自己的姓名，系统只显示当前可认领的任务。</p>
       <div class="claim-fields">
         <input id="claimName" type="text" placeholder="真实姓名" autocomplete="name">
-        <input id="claimCode" type="text" placeholder="兼职编号，例如 JZ-149" autocomplete="off">
         <button class="primary" id="loadAvailableBtn" type="button">查看可认领任务</button>
       </div>
       <div id="claimTasks" class="claim-tasks"></div>
@@ -525,19 +524,19 @@
 
     async function showAvailableTasks() {
       const name = $("claimName").value.trim();
-      const code = $("claimCode").value.trim();
       const message = $("claimMessage");
       message.className = "claim-message";
       message.textContent = "";
-      if (!name || !code) {
+      if (!name) {
         message.className = "claim-message error";
-        message.textContent = "请填写姓名和兼职编号";
+        message.textContent = "请填写姓名";
         return;
       }
       try {
         const data = await loadAvailable();
-        const matched = (data.people || []).some((person) => person.name === name && person.code === code);
-        if (!matched) throw new Error("姓名或兼职编号不匹配");
+        const matched = (data.people || []).filter((person) => person.name === name);
+        if (!matched.length) throw new Error("姓名未登记，请先完成兼职登记");
+        if (matched.length > 1) throw new Error("名册中存在同名兼职，请联系管理员确认");
         availableTasks = data.tasks || [];
         renderAvailableTasks(availableTasks);
         message.textContent = `当前有 ${availableTasks.length} 个可认领任务`;
@@ -564,7 +563,6 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: $("claimName").value.trim(),
-            code: $("claimCode").value.trim(),
             taskIds,
           }),
         });
@@ -575,8 +573,8 @@
         $("claimTasks").innerHTML = "";
         $("claimActions").hidden = true;
         await loadData();
-        const q = $("claimCode").value.trim();
-        renderPeople(people.filter((person) => normalize(person.code) === normalize(q)));
+        const q = $("claimName").value.trim();
+        renderPeople(people.filter((person) => normalize(person.name) === normalize(q)));
       } catch (error) {
         message.className = "claim-message error";
         message.textContent = error.message || "认领失败，请稍后重试";
