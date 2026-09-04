@@ -1,77 +1,5 @@
 [
   {
-    "code": "JZ-004",
-    "name": "向宇",
-    "tasks": []
-  },
-  {
-    "code": "JZ-058",
-    "name": "张婧怡",
-    "tasks": [
-      {
-        "no": "评论截流-0904-001",
-        "type": "评论截流",
-        "status": "已认领",
-        "commission": "0.5",
-        "targetLabel": "目标笔记",
-        "targetTitle": "准备报51talk，这个课包可以入了吗？",
-        "targetUrl": "https://www.xiaohongshu.com/search_result/6a1a547c000000000702498d?xsec_token=ABeizM2ipamkv5cN-G0U__FGDwEZJG6DPCuTkG0M248uE=&xsec_source=",
-        "script": "我们最近给娃用51Talk，老师带得自然，孩子也不排斥。 姐妹们想少走弯路的可以私我",
-        "action": ""
-      },
-      {
-        "no": "评论截流-0904-002",
-        "type": "评论截流",
-        "status": "待认领",
-        "commission": "0.5",
-        "targetLabel": "目标笔记",
-        "targetTitle": "polly上了120节，说说菲教应该怎么选！",
-        "targetUrl": "https://www.xiaohongshu.com/search_result/6a5ee8160000000001000711?xsec_token=ABUFu9LtFxyQy0EZwEK9r6ElmmNLhm8HK5ozNeOj2aEJo=&xsec_source=",
-        "script": "51Talk这位老师会聊天，孩子每次上课都愿意开口。 姐妹们想少走弯路的可以私我",
-        "action": ""
-      }
-    ]
-  },
-  {
-    "code": "JZ-149",
-    "name": "潘俊丽",
-    "tasks": [
-      {
-        "no": "评论截流-0904-001",
-        "type": "评论截流",
-        "status": "已认领",
-        "commission": "0.5",
-        "targetLabel": "目标笔记",
-        "targetTitle": "准备报51talk，这个课包可以入了吗？",
-        "targetUrl": "https://www.xiaohongshu.com/search_result/6a1a547c000000000702498d?xsec_token=ABeizM2ipamkv5cN-G0U__FGDwEZJG6DPCuTkG0M248uE=&xsec_source=",
-        "script": "我们最近给娃用51Talk，老师带得自然，孩子也不排斥。 姐妹们想少走弯路的可以私我",
-        "action": ""
-      },
-      {
-        "no": "评论截流-0904-002",
-        "type": "评论截流",
-        "status": "待认领",
-        "commission": "0.5",
-        "targetLabel": "目标笔记",
-        "targetTitle": "polly上了120节，说说菲教应该怎么选！",
-        "targetUrl": "https://www.xiaohongshu.com/search_result/6a5ee8160000000001000711?xsec_token=ABUFu9LtFxyQy0EZwEK9r6ElmmNLhm8HK5ozNeOj2aEJo=&xsec_source=",
-        "script": "51Talk这位老师会聊天，孩子每次上课都愿意开口。 姐妹们想少走弯路的可以私我",
-        "action": ""
-      },
-      {
-        "no": "评论截流-0904-003",
-        "type": "评论截流",
-        "status": "待认领",
-        "commission": "0.5",
-        "targetLabel": "目标笔记",
-        "targetTitle": "半年英语口语逆袭！平价稳学不踩坑🙅",
-        "targetUrl": "https://www.xiaohongshu.com/search_result/6a472618000000002201b744?xsec_token=ABG27yr2SjZpWgHTN846-lwdsRpo55IGx4nGSPVwhjAOs=&xsec_source=",
-        "script": "我家在51Talk上了一阵，发音顺了，老师也很有耐心。 姐妹们想少走弯路的可以私我",
-        "action": ""
-      }
-    ]
-  },
-  {
     "code": "JZ-20260904-ZGBZXI",
     "name": "郑沛蓉",
     "tasks": [
@@ -82,7 +10,7 @@
         "commission": "0.5",
         "targetLabel": "目标笔记",
         "targetTitle": "Poll和Lingoace 到底要怎么选呢？",
-        "targetUrl": "https://www.xiaohongshu.com/search_result/6a744f7b000000003301bf18?xsec_token=ABknADRzyGsrsa6D46k6-xZNoiHMS1F1MMfoYs6OUPbxY=&xsec_source=",
+        "targetUrl": "https://www.xiaohongshu.com/explore/6a744f7b000000003301bf18?xsec_token=ABknADRzyGsrsa6D46k6-xZNoiHMS1F1MMfoYs6OUPbxY=&xsec_source=",
         "script": "我家上的外教课，上完孩子愿意主动开口了，这点我很满意。",
         "action": ""
       }
