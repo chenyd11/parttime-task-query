@@ -443,11 +443,11 @@
     </div>
 
     <section class="claim">
-      <h2>认领任务</h2>
-      <p class="hint">输入自己的姓名后，查看并选择可认领任务。</p>
+      <h2>查询可认领任务</h2>
+      <p class="hint">输入自己的姓名，查询当前可以领取的任务；选择后再确认认领。</p>
       <div class="claim-fields">
         <input id="claimName" type="text" placeholder="真实姓名" autocomplete="name">
-        <button class="primary" id="loadAvailableBtn" type="button" hidden>查看可认领任务</button>
+        <button class="primary" id="loadAvailableBtn" type="button" hidden>查询可认领任务</button>
       </div>
       <div id="claimTasks" class="claim-tasks"></div>
       <div class="claim-actions" id="claimActions" hidden>
@@ -457,13 +457,13 @@
     </section>
 
     <section class="search">
-      <h2>查询自己的任务详情</h2>
+      <h2>查询自己已认领的任务</h2>
       <div class="search-row">
         <input id="query" type="search" placeholder="输入姓名" autocomplete="name">
-        <button class="primary" id="searchBtn" type="button">查询</button>
+        <button class="primary" id="searchBtn" type="button">查询已认领任务</button>
         <button class="ghost" id="resetBtn" type="button">清空</button>
       </div>
-      <p class="hint">用于查看已经认领的任务详情。</p>
+      <p class="hint">输入自己的姓名，查看已认领任务，并在任务下方提交结果。</p>
     </section>
 
     <div class="result-head">
@@ -484,7 +484,7 @@
         if (!response.ok) throw new Error(`data ${response.status}`);
         const data = await response.json();
         people = Array.isArray(data) ? data : [];
-      $("resultLabel").textContent = "请输入姓名查询";
+      $("resultLabel").textContent = "请输入姓名查询已认领任务";
       } catch (error) {
         people = [];
         $("resultLabel").textContent = "数据加载失败，请稍后刷新";
@@ -748,7 +748,7 @@
     function runQuery() {
       const q = normalize($("query").value);
       if (!q) {
-        $("resultLabel").textContent = "请输入编号或姓名";
+        $("resultLabel").textContent = "请输入姓名";
         $("taskCount").textContent = "";
         results.innerHTML = "";
         return;
