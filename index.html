@@ -175,6 +175,10 @@
       margin-top: 14px;
     }
 
+    .claim-fields .primary[hidden] {
+      display: none;
+    }
+
     .claim-message {
       color: var(--muted);
       font-size: 13px;
@@ -389,17 +393,17 @@
     <div class="top">
       <div>
         <h1>兼职任务查询</h1>
-        <p class="subtitle">输入姓名，查看可认领和已认领任务。</p>
+        <p class="subtitle">选择一个入口开始。</p>
       </div>
       <div class="snapshot">数据快照<br>2026-09-03</div>
     </div>
 
     <section class="claim">
-      <h2>认领新任务</h2>
-      <p class="hint">填写自己的姓名，系统只显示当前可认领的任务。</p>
+      <h2>认领任务</h2>
+      <p class="hint">输入自己的姓名后，查看并选择可认领任务。</p>
       <div class="claim-fields">
         <input id="claimName" type="text" placeholder="真实姓名" autocomplete="name">
-        <button class="primary" id="loadAvailableBtn" type="button">查看可认领任务</button>
+        <button class="primary" id="loadAvailableBtn" type="button" hidden>查看可认领任务</button>
       </div>
       <div id="claimTasks" class="claim-tasks"></div>
       <div class="claim-actions" id="claimActions" hidden>
@@ -409,6 +413,7 @@
     </section>
 
     <section class="search">
+      <h2>查询自己的任务详情</h2>
       <div class="search-row">
         <input id="query" type="search" placeholder="输入姓名" autocomplete="name">
         <button class="primary" id="searchBtn" type="button">查询</button>
@@ -435,7 +440,7 @@
         if (!response.ok) throw new Error(`data ${response.status}`);
         const data = await response.json();
         people = Array.isArray(data) ? data : [];
-        $("resultLabel").textContent = "已加载最新数据，输入姓名查询";
+      $("resultLabel").textContent = "请输入姓名查询";
       } catch (error) {
         people = [];
         $("resultLabel").textContent = "数据加载失败，请稍后刷新";
@@ -641,6 +646,16 @@
       }
     }
 
+    function updateClaimEntryState() {
+      const hasName = Boolean($("claimName").value.trim());
+      $("loadAvailableBtn").hidden = !hasName;
+      if (!hasName) {
+        $("claimTasks").innerHTML = "";
+        $("claimActions").hidden = true;
+        $("claimMessage").textContent = "";
+      }
+    }
+
     async function claimSelectedTasks() {
       const taskIds = [...document.querySelectorAll("#claimTasks input:checked")].map((input) => input.value);
       const message = $("claimMessage");
@@ -694,6 +709,7 @@
 
     loadData();
 
+    $("claimName").addEventListener("input", updateClaimEntryState);
     $("loadAvailableBtn").addEventListener("click", showAvailableTasks);
     $("claimBtn").addEventListener("click", claimSelectedTasks);
     $("claimTasks").addEventListener("change", updateClaimGroupStates);
