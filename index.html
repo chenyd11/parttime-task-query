@@ -99,6 +99,43 @@
       margin-top: 14px;
     }
 
+    .claim-groups {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .claim-group {
+      border: 1px solid #edf0f3;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafbfc;
+    }
+
+    .claim-group-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .claim-group-title {
+      font-weight: 700;
+    }
+
+    .claim-group-count {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .claim-group-list {
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
     .claim-task {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -113,6 +150,10 @@
       height: 18px;
       margin-top: 3px;
       flex: 0 0 auto;
+    }
+
+    .claim-task.is-disabled {
+      opacity: .45;
     }
 
     .claim-task-title {
@@ -514,15 +555,64 @@
         container.innerHTML = '<div class="empty">当前没有可认领任务。</div>';
         return;
       }
-      container.innerHTML = tasks.map((task) => `
-        <label class="claim-task">
-          <input type="checkbox" value="${escapeHtml(task.recordId)}">
-          <span>
-            <span class="claim-task-title">${escapeHtml(task.no || "未命名任务")}</span>
-            <span class="claim-task-meta">${escapeHtml(task.type || "")}${task.targetTitle ? ` · ${escapeHtml(task.targetTitle)}` : ""}</span>
-          </span>
-        </label>
-      `).join("");
+      const groups = [
+        { key: "笔记发布", title: "笔记发布", limit: 1 },
+        { key: "私信用户", title: "私信", limit: 5 },
+        { key: "评论截流", title: "评论", limit: 5 },
+        { key: "举报", title: "举报", limit: null },
+      ];
+      const grouped = new Map(groups.map((group) => [group.key, []]));
+      for (const task of tasks) {
+        const key = task.type === "私信钓鱼举报" || task.type === "私信" ? "私信用户"
+          : task.type === "笔记举报" ? "举报"
+          : grouped.has(task.type) ? task.type
+          : "举报";
+        grouped.get(key).push(task);
+      }
+      container.innerHTML = `
+        <div class="claim-groups">
+          ${groups.map((group) => {
+            const groupTasks = grouped.get(group.key);
+            const count = groupTasks.length;
+            const limitLabel = group.limit === null ? `${count} 个可选` : `已选 0/${group.limit}`;
+            return `
+              <section class="claim-group" data-group="${escapeHtml(group.key)}" data-limit="${group.limit ?? ""}">
+                <div class="claim-group-head">
+                  <span class="claim-group-title">${escapeHtml(group.title)}</span>
+                  <span class="claim-group-count">${limitLabel}</span>
+                </div>
+                <div class="claim-group-list">
+                  ${count ? groupTasks.map((task) => `
+                    <label class="claim-task">
+                      <input type="checkbox" value="${escapeHtml(task.recordId)}" data-task-type="${escapeHtml(group.key)}">
+                      <span>
+                        <span class="claim-task-title">${escapeHtml(task.no || "未命名任务")}</span>
+                        <span class="claim-task-meta">${escapeHtml(task.type || "")}${task.targetTitle ? ` · ${escapeHtml(task.targetTitle)}` : ""}</span>
+                      </span>
+                    </label>
+                  `).join("") : '<div class="claim-task-meta">暂无可认领任务</div>'}
+                </div>
+              </section>
+            `;
+          }).join("")}
+        </div>
+      `;
+      updateClaimGroupStates();
+    }
+
+    function updateClaimGroupStates() {
+      document.querySelectorAll(".claim-group").forEach((group) => {
+        const limitText = group.dataset.limit;
+        const limit = limitText ? Number(limitText) : null;
+        const boxes = [...group.querySelectorAll("input[type=checkbox]")];
+        const selected = boxes.filter((box) => box.checked).length;
+        const count = group.querySelector(".claim-group-count");
+        count.textContent = limit === null ? `${selected} 个已选` : `已选 ${selected}/${limit}`;
+        boxes.forEach((box) => {
+          box.disabled = Boolean(limit !== null && selected >= limit && !box.checked);
+          box.closest(".claim-task")?.classList.toggle("is-disabled", box.disabled);
+        });
+      });
     }
 
     async function showAvailableTasks() {
@@ -605,6 +695,7 @@
 
     $("loadAvailableBtn").addEventListener("click", showAvailableTasks);
     $("claimBtn").addEventListener("click", claimSelectedTasks);
+    $("claimTasks").addEventListener("change", updateClaimGroupStates);
     $("searchBtn").addEventListener("click", runQuery);
     $("resetBtn").addEventListener("click", () => {
       $("query").value = "";
