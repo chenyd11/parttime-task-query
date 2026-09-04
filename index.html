@@ -394,7 +394,7 @@
         if (!response.ok) throw new Error(`data ${response.status}`);
         const data = await response.json();
         people = Array.isArray(data) ? data : [];
-        $("resultLabel").textContent = "已加载最新数据，输入编号或姓名查询";
+        $("resultLabel").textContent = "已加载最新数据，输入姓名查询";
       } catch (error) {
         people = [];
         $("resultLabel").textContent = "数据加载失败，请稍后刷新";
@@ -402,7 +402,10 @@
     }
 
     async function loadAvailable() {
-      const response = await fetch(`${apiBase}/available`, { cache: "no-store" });
+      const response = await fetch(`${apiBase}/available`, {
+        cache: "no-store",
+        headers: { "ngrok-skip-browser-warning": "1" },
+      });
       if (!response.ok) throw new Error(`available ${response.status}`);
       return response.json();
     }
@@ -560,7 +563,10 @@
       try {
         const response = await fetch(`${apiBase}/claim`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "1",
+          },
           body: JSON.stringify({
             name: $("claimName").value.trim(),
             taskIds,
