@@ -348,7 +348,7 @@
     <div class="top">
       <div>
         <h1>兼职任务查询</h1>
-        <p class="subtitle">输入你的兼职编号或姓名，查看已认领任务和可复制的话术、链接。</p>
+        <p class="subtitle">输入姓名，查看可认领和已认领任务。</p>
       </div>
       <div class="snapshot">数据快照<br>2026-09-03</div>
     </div>
@@ -369,11 +369,11 @@
 
     <section class="search">
       <div class="search-row">
-        <input id="query" type="search" placeholder="例如：JZ-004 或 向宇" autocomplete="off">
+        <input id="query" type="search" placeholder="输入姓名" autocomplete="name">
         <button class="primary" id="searchBtn" type="button">查询</button>
         <button class="ghost" id="resetBtn" type="button">清空</button>
       </div>
-      <p class="hint">当前数据只包含已认领任务的测试快照，后续接入自动同步后会持续更新。</p>
+      <p class="hint">用于查看已经认领的任务详情。</p>
     </section>
 
     <div class="result-head">
@@ -428,7 +428,7 @@
     function renderPeople(matches) {
       results.innerHTML = "";
       if (!matches.length) {
-        results.innerHTML = '<div class="empty">没查到匹配结果。检查兼职编号或姓名后重试。</div>';
+        results.innerHTML = '<div class="empty">没查到这个姓名的已认领任务。</div>';
         $("resultLabel").textContent = "未找到";
         $("taskCount").textContent = "";
         return;
@@ -591,9 +591,7 @@
         results.innerHTML = "";
         return;
       }
-      const matches = people.filter((person) =>
-        normalize(person.code).includes(q) || normalize(person.name).includes(q)
-      );
+      const matches = people.filter((person) => normalize(person.name).includes(q));
       renderPeople(matches);
     }
 
