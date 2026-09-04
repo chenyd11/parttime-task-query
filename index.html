@@ -75,6 +75,74 @@
       margin-bottom: 18px;
     }
 
+    .claim {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .claim h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .claim-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .claim-tasks {
+      margin-top: 14px;
+    }
+
+    .claim-task {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 11px 0;
+      border-top: 1px solid #edf0f3;
+    }
+
+    .claim-task input {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      flex: 0 0 auto;
+    }
+
+    .claim-task-title {
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .claim-task-meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .claim-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .claim-message {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .claim-message.error { color: #b42318; }
+    .claim-message.success { color: var(--ok); }
+
     .search-row {
       display: flex;
       gap: 10px;
@@ -266,6 +334,8 @@
       .snapshot { text-align: left; margin-top: 12px; }
       .search-row { flex-wrap: wrap; }
       .primary { width: 100%; }
+      .claim-fields { grid-template-columns: 1fr; }
+      .claim-fields .primary { width: 100%; }
       .field { grid-template-columns: 1fr; gap: 3px; }
       .field-label { padding-top: 0; }
       .task-title { display: block; }
@@ -282,6 +352,21 @@
       </div>
       <div class="snapshot">数据快照<br>2026-09-03</div>
     </div>
+
+    <section class="claim">
+      <h2>认领新任务</h2>
+      <p class="hint">先填写自己的姓名和兼职编号，系统只显示当前可认领的任务。</p>
+      <div class="claim-fields">
+        <input id="claimName" type="text" placeholder="真实姓名" autocomplete="name">
+        <input id="claimCode" type="text" placeholder="兼职编号，例如 JZ-149" autocomplete="off">
+        <button class="primary" id="loadAvailableBtn" type="button">查看可认领任务</button>
+      </div>
+      <div id="claimTasks" class="claim-tasks"></div>
+      <div class="claim-actions" id="claimActions" hidden>
+        <button class="primary" id="claimBtn" type="button">确认认领</button>
+        <span id="claimMessage" class="claim-message"></span>
+      </div>
+    </section>
 
     <section class="search">
       <div class="search-row">
@@ -301,6 +386,8 @@
 
   <script>
     let people = [];
+    let availableTasks = [];
+    const apiBase = "https://odourless-demetra-cany.ngrok-free.dev";
 
     async function loadData() {
       try {
@@ -313,6 +400,12 @@
         people = [];
         $("resultLabel").textContent = "数据加载失败，请稍后刷新";
       }
+    }
+
+    async function loadAvailable() {
+      const response = await fetch(`${apiBase}/available`, { cache: "no-store" });
+      if (!response.ok) throw new Error(`available ${response.status}`);
+      return response.json();
     }
 
     const submitUrl = "https://alidocs.dingtalk.com/notable/share/form/v01QvjnA3JeRLrK4OXo_OyTmY8y_6rrD0kS";
@@ -412,6 +505,86 @@
       $("taskCount").textContent = `共 ${totalTasks} 个任务`;
     }
 
+    function renderAvailableTasks(tasks) {
+      const container = $("claimTasks");
+      $("claimActions").hidden = !tasks.length;
+      if (!tasks.length) {
+        container.innerHTML = '<div class="empty">当前没有可认领任务。</div>';
+        return;
+      }
+      container.innerHTML = tasks.map((task) => `
+        <label class="claim-task">
+          <input type="checkbox" value="${escapeHtml(task.recordId)}">
+          <span>
+            <span class="claim-task-title">${escapeHtml(task.no || "未命名任务")}</span>
+            <span class="claim-task-meta">${escapeHtml(task.type || "")}${task.targetTitle ? ` · ${escapeHtml(task.targetTitle)}` : ""}</span>
+          </span>
+        </label>
+      `).join("");
+    }
+
+    async function showAvailableTasks() {
+      const name = $("claimName").value.trim();
+      const code = $("claimCode").value.trim();
+      const message = $("claimMessage");
+      message.className = "claim-message";
+      message.textContent = "";
+      if (!name || !code) {
+        message.className = "claim-message error";
+        message.textContent = "请填写姓名和兼职编号";
+        return;
+      }
+      try {
+        const data = await loadAvailable();
+        const matched = (data.people || []).some((person) => person.name === name && person.code === code);
+        if (!matched) throw new Error("姓名或兼职编号不匹配");
+        availableTasks = data.tasks || [];
+        renderAvailableTasks(availableTasks);
+        message.textContent = `当前有 ${availableTasks.length} 个可认领任务`;
+      } catch (error) {
+        $("claimTasks").innerHTML = "";
+        $("claimActions").hidden = true;
+        message.className = "claim-message error";
+        message.textContent = error.message || "暂时无法加载任务";
+      }
+    }
+
+    async function claimSelectedTasks() {
+      const taskIds = [...document.querySelectorAll("#claimTasks input:checked")].map((input) => input.value);
+      const message = $("claimMessage");
+      if (!taskIds.length) {
+        message.className = "claim-message error";
+        message.textContent = "请至少选择一个任务";
+        return;
+      }
+      $("claimBtn").disabled = true;
+      try {
+        const response = await fetch(`${apiBase}/claim`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: $("claimName").value.trim(),
+            code: $("claimCode").value.trim(),
+            taskIds,
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "认领失败");
+        message.className = "claim-message success";
+        message.textContent = `认领成功，共 ${data.tasks.length} 个任务`;
+        $("claimTasks").innerHTML = "";
+        $("claimActions").hidden = true;
+        await loadData();
+        const q = $("claimCode").value.trim();
+        renderPeople(people.filter((person) => normalize(person.code) === normalize(q)));
+      } catch (error) {
+        message.className = "claim-message error";
+        message.textContent = error.message || "认领失败，请稍后重试";
+      } finally {
+        $("claimBtn").disabled = false;
+      }
+    }
+
     function runQuery() {
       const q = normalize($("query").value);
       if (!q) {
@@ -428,6 +601,8 @@
 
     loadData();
 
+    $("loadAvailableBtn").addEventListener("click", showAvailableTasks);
+    $("claimBtn").addEventListener("click", claimSelectedTasks);
     $("searchBtn").addEventListener("click", runQuery);
     $("resetBtn").addEventListener("click", () => {
       $("query").value = "";
