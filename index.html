@@ -667,7 +667,8 @@
         message.className = "claim-message success";
         message.textContent = `认领成功，共 ${data.tasks.length} 个任务`;
         $("claimTasks").innerHTML = "";
-        $("claimActions").hidden = true;
+        $("claimBtn").hidden = true;
+        $("claimActions").hidden = false;
         await loadData();
         const q = $("claimName").value.trim();
         renderPeople(people.filter((person) => normalize(person.name) === normalize(q)));
