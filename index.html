@@ -291,6 +291,50 @@
       margin-bottom: 12px;
     }
 
+    .submit-box {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #edf0f3;
+    }
+
+    .submit-box-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .submit-box input[type="url"],
+    .submit-box input[type="file"],
+    .submit-box textarea {
+      width: 100%;
+      height: auto;
+      margin-top: 8px;
+      padding: 9px 10px;
+      border: 1px solid #c9d1d9;
+      border-radius: 7px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .submit-box textarea {
+      min-height: 68px;
+      resize: vertical;
+    }
+
+    .submit-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 9px;
+    }
+
+    .submit-row .primary {
+      height: 38px;
+      font-size: 13px;
+      padding: 0 14px;
+    }
+
     .task-title {
       display: flex;
       align-items: flex-start;
@@ -540,9 +584,15 @@
             ${targetBlock}
             ${scriptBlock}
             ${actionBlock}
-            <div class="field">
-              <div class="field-label">提交入口</div>
-              <div class="field-value"><a href="${escapeHtml(submitUrl)}" target="_blank" rel="noreferrer">打开任务提交表单</a></div>
+            <div class="submit-box" data-submit-box="${escapeHtml(task.recordId)}">
+              <div class="submit-box-title">提交任务</div>
+              <input type="url" name="submitLink" placeholder="结果链接（没有可留空）">
+              <input type="file" name="screenshot" accept="image/*">
+              <textarea name="note" placeholder="补充说明（可选）"></textarea>
+              <div class="submit-row">
+                <button class="primary" type="button" data-submit-task="${escapeHtml(task.recordId)}">提交审核</button>
+                <span class="claim-message" data-submit-message></span>
+              </div>
             </div>
           `;
           results.appendChild(card);
@@ -726,6 +776,38 @@
     });
 
     results.addEventListener("click", async (event) => {
+      const submitButton = event.target.closest("[data-submit-task]");
+      if (submitButton) {
+        const box = submitButton.closest("[data-submit-box]");
+        const message = box.querySelector("[data-submit-message]");
+        const form = new FormData();
+        form.append("name", $("query").value.trim() || $("claimName").value.trim());
+        form.append("taskId", submitButton.dataset.submitTask);
+        form.append("submitLink", box.querySelector('[name="submitLink"]').value.trim());
+        form.append("note", box.querySelector('[name="note"]').value.trim());
+        const file = box.querySelector('[name="screenshot"]').files[0];
+        if (file) form.append("screenshot", file);
+        submitButton.disabled = true;
+        message.className = "claim-message";
+        message.textContent = "提交中...";
+        try {
+          const response = await fetch(`${apiBase}/submit`, {
+            method: "POST",
+            headers: { "ngrok-skip-browser-warning": "1" },
+            body: form,
+          });
+          const data = await response.json();
+          if (!response.ok || !data.ok) throw new Error(data.error || "提交失败");
+          message.className = "claim-message success";
+          message.textContent = data.message || "提交成功，已进入人工审核";
+          box.closest(".task")?.remove();
+        } catch (error) {
+          message.className = "claim-message error";
+          message.textContent = error.message || "提交失败，请稍后重试";
+          submitButton.disabled = false;
+        }
+        return;
+      }
       const button = event.target.closest("[data-copy]");
       if (!button) return;
       const text = button.getAttribute("data-copy");
